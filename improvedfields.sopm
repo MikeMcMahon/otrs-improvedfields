@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<otrs_package version="1.0">
+    <Name>improvedfields</Name>
+    <Version>1.0.4</Version>
+    <Framework>3.1.x</Framework>
+    <Framework>3.2.x</Framework>
+    <Vendor></Vendor>
+    <URL>http://mikemcmahon.github.io/</URL>
+    <License>GNU Affero General Public License Version 3, November 2007</License>
+    <Description Lang="en">Includes a myriad of Dynamic Fields that may be useful to some</Description>
+    <IntroInstall Type="post" Lang="en" Title="Thank you!">Thank you for choosing the ImprovedFields module!</IntroInstall>
+    <BuildHost></BuildHost>
+    <Filelist>
+        <File Permission="644" Location="Kernel/Config/Files/ImprovedFields.xml"></File>
+        <File Permission="644" Location="Kernel/Modules/AdminDynamicFieldCustomText.pm"></File>
+        <File Permission="644" Location="Kernel/Modules/AdminDynamicFieldImprovedDateTime.pm"></File>
+        <File Permission="644" Location="Kernel/Modules/DynamicFieldAutocompleteText.pm"></File>
+        <File Permission="644" Location="Kernel/Modules/DynamicFieldTabularDataField.pm"></File>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminDynamicFieldCustomText.dtl"></File>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminDynamicFieldImprovedDateTime.dtl"></File>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminDynamicFieldTabularDataField.dtl"></File>
+        <File Permission="644" Location="Kernel/System/DynamicField/Backend/AutocompleteText.pm"></File>
+        <File Permission="644" Location="Kernel/System/DynamicField/Backend/ImprovedDate.pm"></File>
+        <File Permission="644" Location="Kernel/System/DynamicField/Backend/RegexText.pm"></File>
+        <File Permission="644" Location="Kernel/System/DynamicField/Backend/TabularDataField.pm"></File>
+        
+        <!-- Required JS Files -->
+        <File Permission="644" Location="var/httpd/htdocs/thirdparty/improvedfields/ImprovedFields.js"></File>
+        <File Permission="644" Location="var/httpd/htdocs/thirdparty/improvedfields/ImprovedFields.TabularField.js"></File>
+    </Filelist>
+</otrs_package>
