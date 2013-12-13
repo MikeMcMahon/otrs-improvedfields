@@ -13,19 +13,21 @@ Examples:
 
     ^\([0-9]{3}\) [1-9]{3}-[0-9]{4}$
 
-Matches any phone number in the format of (555) 555-5555 (american style numbers)
+__Matches any phone number in the format of (555) 555-5555 (american style numbers)__
 
 *Numbers Only*
 
     ^[0-9]*$
     
-Matches any set of numbers
+__forces input to contain only numbers__
 
 *Alpha Only*
 
     ^[a-zA-Z]*$
-    
-validated using http://www.regexpal.com/
+
+__forces input to contain only characters__
+
+Validated using http://www.regexpal.com/
 
 ### Improved Date/Time Field
 
