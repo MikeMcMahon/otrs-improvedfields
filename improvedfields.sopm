@@ -23,9 +23,7 @@
         <File Permission="644" Location="Kernel/System/DynamicField/Backend/ImprovedDate.pm"></File>
         <File Permission="644" Location="Kernel/System/DynamicField/Backend/RegexText.pm"></File>
         <File Permission="644" Location="Kernel/System/DynamicField/Backend/TabularDataField.pm"></File>
-
         <!-- Required CSS/JS Files -->
-        Copyright (C) 2013 Mike McMahon, http://mikemcmahon.github.io
         <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/css/thirdparty/improvedfields/ImprovedFields.css"></File>
         <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/css/thirdparty/improvedfields/ImprovedFields.TabularField.css"></File>
         <File Permission="644" Location="var/httpd/htdocs/thirdparty/improvedfields/ImprovedFields.js"></File>
