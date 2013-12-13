@@ -11,7 +11,7 @@ Examples:
 
 *Phone Validation*
 
-    ^\([0-9]{3}\) [1-9]{3}-[0-9]{4}$
+    ^\([0-9]{3}\) [1-9][0-9]{2}-[0-9]{4}$
 
 __Matches any phone number in the format of (555) 555-5555 (american style numbers)__
 
