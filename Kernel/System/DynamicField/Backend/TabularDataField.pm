@@ -20,6 +20,7 @@ use Kernel::System::JSON;
 use Kernel::System::YAML;
 
 use Data::Dumper;
+use Time::Local;
 
 use vars qw($VERSION);
 $VERSION = qw($Revision: 1.72 $) [1];
@@ -66,7 +67,7 @@ sub new {
     $Self->{DynamicFieldValueObject} = Kernel::System::DynamicFieldValue->new( %{$Self} );
     $Self->{BackendCommonObject}
         = Kernel::System::DynamicField::Backend::BackendCommon->new( %{$Self} );
-        
+
     return $Self;
 }
 
@@ -89,16 +90,10 @@ sub ValueGet {
 sub ValueSet {
     my ( $Self, %Param ) = @_;
 
-
-	$Self->{LogObject}->Log(
-		Priority => 'notice',
-		Message  => "$Param{Value}"
-	);
-
 	# comes in as JSON we need to convert to YAML
 	my $encoded = $Self->{JSONObject}->Decode(Data => $Param{Value});
 	my $yaml = $Self->{YAMLObject}->Dump(Data => $encoded );
-	
+
     my $Success = $Self->{DynamicFieldValueObject}->ValueSet(
         FieldID  => $Param{DynamicFieldConfig}->{ID},
         ObjectID => $Param{ObjectID},
@@ -224,48 +219,60 @@ sub EditFieldRender {
 
     # set error css class
     $FieldClass .= ' ServerError' if $Param{ServerError};
-    
+
+	my $ErrorColumn = '';
+	my $ErrorMessage = '';
+    if ( $Param{ServerError} ) {
+        ($ErrorColumn, $ErrorMessage) = split ":", $Param{ErrorMessage} || "";
+    }
+
+
     # Create an input for each of the columns
     my $PossibleValues = $Param{DynamicFieldConfig}->{Config}->{PossibleValues};
-    
     my %InversePossibleValues = reverse %$PossibleValues;
     my @ColumnsSorted = 
     		  map  { $_->[0] }
-    		  sort { $a->[1] <=> $b->[1] }
+    		  sort { (split ':', $a->[1])[0] <=> (split ':', $b->[1])[0] }
     		  map  { [$_, length($_)] }
     		  sort keys %InversePossibleValues;
-    
+
     # Comes from the db in yaml, we need to undo that
     my $DisplayValue = $Self->{YAMLObject}->Load(Data => $Value);
-    
+
    	$DisplayValue = $Self->{JSONObject}->Encode(Data => $DisplayValue);
-   	
+
     my $HTMLString =<<"EOF";
-    <textarea style="display:none;" name="$FieldName" id="$FieldName" class="$FieldClass" >
+    <textarea style="display:none;" name="$FieldName" id="$FieldName" >
     $DisplayValue
     </textarea>
 EOF
-    $HTMLString .= "<table id=\"\$FieldName\_DataTable\" style=\"width:600px;\"><thead><tr>";
-    
+    $HTMLString .= "<table id=\"\$FieldName\_DataTable\" class=\"TabularField\" ><thead><tr>";
+
    	HTML:
     foreach ( @ColumnsSorted ) {
-	$HTMLString .= <<"EOF";
-		<th style="text-align:center;"><label>$InversePossibleValues{$_}</label></th>
+    	my ($order, $type) = split ':', $_;
+    	my $Required = '';
+    	if (index($type, 'r') != -1) {
+    		$Required = '*';
+    	}
+		$HTMLString .= <<"EOF";
+<th >$Required<label>$InversePossibleValues{$_}</label></th>
 EOF
     }
-    
-    $HTMLString .= "<th style='text-align:center;width:10px;'></th></tr></thead><tbody id='$FieldName\_RowData'>";
-    
+
+    $HTMLString .= "<th class='RemoveValue'></th></tr></thead><tbody id='$FieldName\_RowData'>";
+
     my $decoded = $Self->{YAMLObject}->Load(Data => $Value);
-    
+
     # Keep row order and ACTUALLY FUCKING SORT BASED ON NUMERIC VALUE
     my @RowsSorted = 
     		  map  { $_->[0] }
     		  sort { $a->[1] <=> $b->[1] }
     		  map  { [$_, length($_)] }
     		  sort keys %$decoded;
-    
+
     my $rc = 0;
+    my $Class = '';
     HTML:
     foreach ( @RowsSorted ) {
     	next HTML if !IsHashRefWithData($decoded->{$_});
@@ -275,22 +282,41 @@ EOF
 EOF
 		# add any pre-existing data 
 		for my $col ( @ColumnsSorted ) {
+			my ($order, $type) = split ':', $col;
+			$type = (split '', $type)[0];
+
+			$Class = "";
+			if ($InversePossibleValues{$col} eq $ErrorColumn) {
+				$Class = 'Required';
+			}
+
 			$HTMLString .=<<"EOF";
-			<td name="$InversePossibleValues{$col}\_$rc" id="$FieldName\_$InversePossibleValues{$col}\_$rc" style="text-align:center" >
-				<input id="$FieldName\_$InversePossibleValues{$col}" type="text" style="width:90%;" value="$decoded->{$_}->{$InversePossibleValues{$col}}" />
-			</td>
+<td name="$InversePossibleValues{$col}\_$rc" id="$FieldName\_$InversePossibleValues{$col}\_$rc" >
 EOF
+			if ($type eq 'd') {
+				# Render this as a date field
+				$HTMLString .=<<"EOF";
+<input id="$FieldName\_$InversePossibleValues{$col}" class="$Class TFDateType" type="text" value="$decoded->{$_}->{$InversePossibleValues{$col}}" />
+<br />
+<span class="Note">YYYY-MM-DD</span>
+EOF
+			} else {
+				$HTMLString .=<<"EOF";
+<input id="$FieldName\_$InversePossibleValues{$col}" class="$Class" type="text" value="$decoded->{$_}->{$InversePossibleValues{$col}}" />
+EOF
+			}
+			$HTMLString .= "</td>";
 		}
 		$HTMLString .=<<"EOF";
 		<td id="$FieldName\_RemoveValue"><button type="button" id="RemoveValue" class="Remove ValueRemove" value="Remove value">\$Text{"Remove value"}</button></td>
 EOF
 		$rc++;
-		
+
 		$HTMLString .= <<"EOF";
 	</tr>
 EOF
     }
-    
+
     $HTMLString .= <<"EOF";
     <tr id="$FieldName\_TemplateRow" style="display:none;">
 EOF
@@ -305,15 +331,15 @@ EOF
 EOF
 	
     $HTMLString .= '</tr></tbody></table>';
+
     $HTMLString .= <<"EOF";
-    
-<span style="display:block;width:600px;text-align:right;"><button id="$FieldName\_AddValue" class="Add" type="button" value="Add Value">\$Text{"Add Value"}</button></span>
+<span class="TabularFieldRemoveValue"><button id="$FieldName\_AddValue" class="Add" type="button" value="Add Value">\$Text{"Add Value"}</button></span>
 <!--dtl:js_on_document_complete-->
 <script type="text/javascript">//<![CDATA[
 
 	\$(function() {
 		ImprovedFields.TabularField.Bind("$FieldName");
-		
+
 		// Add a handler for the click event
 		\$("#$FieldName\_AddValue").click(function() {
 			ImprovedFields.TabularField.AddValue("$FieldName");
@@ -325,35 +351,6 @@ EOF
 //]]></script>
 <!--dtl:js_on_document_complete-->
 EOF
-    
-    if ( $Param{Mandatory} ) {
-        my $DivID = $FieldName . 'Error';
-
-        # for client side validation
-        $HTMLString .= <<"EOF";
-    <div id="$DivID" class="TooltipErrorMessage">
-        <p>
-            \$Text{"This field is required."}
-        </p>
-    </div>
-EOF
-    }
-
-    if ( $Param{ServerError} ) {
-
-        my $ErrorMessage = $Param{ErrorMessage} || 'This field is required.';
-        my $DivID = $FieldName . 'ServerError';
-
-        # for server side validation
-        $HTMLString .= <<"EOF";
-    <div id="$DivID" class="TooltipErrorMessage">
-        <p>
-            \$Text{"$ErrorMessage"}
-        </p>
-    </div>
-EOF
-    }
-
     # call EditLabelRender on the common backend
     my $LabelString = $Self->{BackendCommonObject}->EditLabelRender(
         DynamicFieldConfig => $Param{DynamicFieldConfig},
@@ -415,14 +412,62 @@ sub EditFieldValueValidate {
     if ( $Param{Mandatory} && $Value eq '' ) {
         $ServerError = 1;
     }
-    
-    $Value = ($Value == "" || $Value == undef) ? "{}" : $Value;
-    
-    if ($Self->{JSONObject}->Decode(Data => $Value) == undef) {
+
+    $Value = ($Value eq "") ? "{}" : $Value;
+
+	my $decoded = $Self->{JSONObject}->Decode(Data => $Value);
+    if ($decoded == undef) {
     	$ServerError = 1;
-    	$ErrorMessage = "Malformed data"
+    	$ErrorMessage = "::Malformed data"
     };
-    
+
+    my $PossibleValues = $Param{DynamicFieldConfig}->{Config}->{PossibleValues};
+    my %InversePossibleValues = reverse %$PossibleValues;
+    my @ColumnsSorted = 
+    		  map  { $_->[0] }
+    		  sort { (split ':', $a->[1])[0] <=> (split ':', $b->[1])[0] }
+    		  map  { [$_, length($_)] }
+    		  sort keys %InversePossibleValues;
+
+	my @Required;
+	my @Datetype;
+	foreach (@ColumnsSorted) {
+		my ($order, $type) = split ':', $_;
+		if (index($type, 'r') != -1) {
+			push @Required, $_;
+		}
+		if (index($type, 'd') != -1) {
+			push @Datetype, $_;
+		}
+	}
+
+	foreach my $Key (keys %{$decoded}) {
+		foreach (@Required) {
+			my $size = length($decoded->{$Key}->{$InversePossibleValues{$_}});
+			if (!defined $size || $size == 0) {
+				$ServerError = 1;
+				$ErrorMessage = "$InversePossibleValues{$_}:Required Field Missing!";
+			}
+		}
+
+		foreach (@Datetype) {
+			my $data = $decoded->{$Key}->{$InversePossibleValues{$_}};
+			if ($data !~ /^(20[1-9][0-9])-([0-1][0-9])-([0-3][0-9])$/) {
+				$ServerError = 1;
+				$ErrorMessage = "$InversePossibleValues{$_}:Invalid Date Format!";
+			} else {
+				my ($year, $month, $day) = split '-', $data;
+				eval{
+					timelocal(0,0,0,$day, $month-1, $year) || die undef;
+					1;
+				} or eval{
+					$ServerError = 1;
+					$ErrorMessage = "$InversePossibleValues{$_}:Invalid Date!";
+				}
+			}
+		}
+	}
+
 
     # create resulting structure
     my $Result = {

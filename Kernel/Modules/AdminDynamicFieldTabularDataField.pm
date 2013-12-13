@@ -208,12 +208,10 @@ sub _AddAction {
             # set a true entry in NewValueEmptyError
             $Errors{'PossibleValueErrors'}->{'ValueEmptyError'}->{$Key} = 1;
         }
-        
         # check for values that are not digits
-        elsif ( $PossibleValues->{$Key} =~ /^[^0-9]+$/ ) {
+        elsif ($PossibleValues->{$Key} !~ /^[0-9]+(:[and])?([r])?$/ ) {
         	$Errors{'PossibleValueErrors'}->{'ValueIncorrectError'}->{$Key} = 1;
         }
-        
     }
 
     # return to add screen if errors
@@ -461,13 +459,11 @@ sub _ChangeAction {
 
         # check for empty new values
         if ( !defined $PossibleValues->{$Key} ) {
-
             # set a true entry in NewValueEmptyError
             $Errors{'PossibleValueErrors'}->{'ValueEmptyError'}->{$Key} = 1;
         }
-        
         # check for values that are not digits
-        elsif ( $PossibleValues->{$Key} =~ /^[^0-9]+$/ ) {
+        elsif ($PossibleValues->{$Key} !~ /^[0-9]+(:[and])?([r])?$/ ) {
         	$Errors{'PossibleValueErrors'}->{'ValueIncorrectError'}->{$Key} = 1;
         }
     }
@@ -630,12 +626,11 @@ sub _ShowScreen {
 
                 # set the error class
                 $ValueError = 'ServerError';
-            }   
-            
+            }
             elsif ( $Param{'PossibleValueErrors'}->{'ValueIncorrectError'}->{$Key} ) {
             	#set the error class
             	$ValueError = 'ServerError';
-            	$ValueErrorStrg = 'This field must be numerical only';
+            	$ValueErrorStrg = 'This field must be numeric followed by a type';
             }
         }
 

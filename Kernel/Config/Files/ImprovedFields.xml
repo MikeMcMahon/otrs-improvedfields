@@ -1,142 +1,207 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<otrs_config version="1.0" init="Application">
-	<ConfigItem Name="Loader::Agent::CommonJS###100-ImprovedFields" Required="0" Valid="1">
-		<Description Translatable="1">Javascript for the agent interfaceloader.</Description>
+<otrs_config
+	version="1.0"
+	init="Application">
+	<ConfigItem
+		Name="Loader::Agent::CommonJS###100-ImprovedFields"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Javascript for the agent interface loader.</Description>
 		<Group>Framework</Group>
 		<SubGroup>Core::Web</SubGroup>
-        <Setting>
-            <Array>
-                <Item>thirdparty/improvedfields/ImprovedFields.js</Item>
-                <Item>thirdparty/improvedfields/ImprovedFields.TabularField.js</Item>
-            </Array>
-		</Setting>
-    </ConfigItem>
-	<ConfigItem Name="Loader::Customer::CommonJS###100-ImprovedFields" Required="0" Valid="1">
-		<Description Translatable="1">Javascript for the customer interfaceloader.</Description>
-		<Group>Framework</Group>
-		<SubGroup>Core::Web</SubGroup>
-        <Setting>
-            <Array>
-                <Item>thirdparty/improvedfields/ImprovedFields.js</Item>
-                <Item>thirdparty/improvedfields/ImprovedFields.TabularField.js</Item>
-            </Array>
-		</Setting>
-    </ConfigItem>
-	<ConfigItem Name="DynamicFields::Backend###RegexText" Required="0" Valid="1">
-		<Description Translatable="1">Registration for the regex text type.</Description>
-		<Group>ImprovedFields</Group>
-		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
-        <Setting>
-            <Hash>
-                <Item Key="ConfigDialog">AdminDynamicFieldCustomText</Item>
-                <Item Key="DisplayName">RegexText</Item>
-                <Item Key="Module">Kernel::System::DynamicField::Backend::RegexText</Item>
-            </Hash>
-		</Setting>
-    </ConfigItem>
-	<ConfigItem Name="DynamicFields::Backend###AutocompleteText" Required="0" Valid="1">
-        <Description Translatable="1">Registration for the autocomplete type</Description>
-		<Group>ImprovedFields</Group>
-		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
-        <Setting>
-            <Hash>
-                <Item Key="ConfigDialog">AdminDynamicFieldCustomText</Item>
-                <Item Key="DisplayName">AutocompleteText</Item>
-                <Item Key="Module">Kernel::System::DynamicField::Backend::AutocompleteText</Item>
-            </Hash>
-		</Setting>
-    </ConfigItem>
-	<ConfigItem Name="DynamicFields::Backend###ImprovedDate" Required="0" Valid="1">
-		<Description Translatable="1">Registration for the date type.</Description>
-		<Group>ImprovedFields</Group>
-		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
-        <Setting>
-            <Hash>
-                <Item Key="ConfigDialog">AdminDynamicFieldImprovedDateTime</Item>
-                <Item Key="DisplayName">ImprovedDate</Item>
-                <Item Key="Module">Kernel::System::DynamicField::Backend::ImprovedDate</Item>
-            </Hash>
-		</Setting>
-    </ConfigItem>
-	<ConfigItem Name="DynamicFields::Backend###TabularDataField" Required="0" Valid="1">
-		<Description Translatable="1">Registration for the multiline column text type.</Description>
-		<Group>ImprovedFields</Group>
-		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
-        <Setting>
-            <Hash>
-                <Item Key="ConfigDialog">AdminDynamicFieldTabularDataField</Item>
-                <Item Key="DisplayName">TabularData</Item>
-                <Item Key="Module">Kernel::System::DynamicField::Backend::TabularDataField</Item>
-            </Hash>
+		<Setting>
+			<Array>
+				<Item>thirdparty/improvedfields/ImprovedFields.js</Item>
+				<Item>thirdparty/improvedfields/ImprovedFields.TabularField.js</Item>
+			</Array>
 		</Setting>
 	</ConfigItem>
-    <ConfigItem Name="Frontend::Module###AdminDynamicFieldCustomText" Required="0" Valid="1">
-        <Description Translatable="1">Frontend module registration for the admin interface</Description>
-        <Group>ImprovedFields</Group>
-        <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
-        <Setting>
-            <FrontendModuleReg>
-                <Group>admin</Group>
-                <Title Translatable="1">Dynamic Fields RegexText Backend GUI</Title>
-                <Description>Admin</Description>
-                <Loader>
-                    <JavaScript>Core.Agent.Admin.DynamicField.js</JavaScript>
-                </Loader>
-            </FrontendModuleReg>
-        </Setting>
-    </ConfigItem>
-    <ConfigItem Name="CustomerFrontend::Module###DynamicFieldAutocompleteText" Required="0" Valid="1">
-        <Description Translatable="1">Frontend module registration for the customer interface</Description>
-        <Group>ImprovedFields</Group>
-        <SubGroup>Frontend::Customer::ModuleRegistration</SubGroup>
-        <Setting>
-            <FrontendModuleReg>
-                <Description>Customize this class with your own actions</Description>
-            </FrontendModuleReg>
-        </Setting>
-    </ConfigItem>
-    <ConfigItem Name="Frontend::Module###AdminDynamicFieldImprovedDateTime" Required="0" Valid="1">
-        <Description Translatable="1">Frontend module registration for the admin interface</Description>
-        <Group>ImprovedFields</Group>
-        <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
-        <Setting>
-            <FrontendModuleReg>
-                <Group>admin</Group>
-                <Title Translatable="1">Dynamic Fields ImprovedDateTime Backend GUI</Title>
-                <Description>Admin</Description>
-                <Loader>
-                    <JavaScript>Core.Agent.Admin.DynamicField.js</JavaScript>
-                    <CSS>Core.Agent.Admin.DynamicField.css</CSS>
-                    <JavaScript>Core.Agent.Admin.DynamicFieldDateTime.js</JavaScript>
-                </Loader>
-            </FrontendModuleReg>
-        </Setting>
-    </ConfigItem>
-    <ConfigItem Name="Frontend::Module###DynamicFieldAutocompleteText" Required="0" Valid="1">
-        <Description Translatable="1">Frontend module registration for the agent interface</Description>
-        <Group>ImprovedFields</Group>
-        <SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
-        <Setting>
-            <FrontendModuleReg>
-                <Description>Customize this class with your own actions</Description>
-            </FrontendModuleReg>
-        </Setting>
-    </ConfigItem>
-    <ConfigItem Name="Frontend::Module###AdminDynamicFieldTabularDataField" Required="0" Valid="1">
-        <Description Translatable="1">Frontend module registration for the admin interface</Description>
-        <Group>ImprovedFields</Group>
-        <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
-        <Setting>
-            <FrontendModuleReg>
-                <Group>admin</Group>
-                <Title Translatable="1">Dynamic Fields TabularDataField Backend GUI</Title>
-                <Description>Admin</Description>
-                <Loader>
-                    <CSS>Core.Agent.Admin.DynamicField.css</CSS>
-                    <JavaScript>Core.Agent.Admin.DynamicField.js</JavaScript>
-                    <JavaScript>Core.Agent.Admin.DynamicFieldMultiselect.js</JavaScript>
-                </Loader>
-            </FrontendModuleReg>
-        </Setting>
-    </ConfigItem>
+	<ConfigItem
+		Name="Loader::Customer::CommonJS###100-ImprovedFields"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Javascript for the customer interface loader.</Description>
+		<Group>Framework</Group>
+		<SubGroup>Core::Web</SubGroup>
+		<Setting>
+			<Array>
+				<Item>thirdparty/improvedfields/ImprovedFields.js</Item>
+				<Item>thirdparty/improvedfields/ImprovedFields.TabularField.js</Item>
+			</Array>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="Loader::Agent::CommonCSS###100-ImprovedFields"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">CSS for the agent interface loader.
+		</Description>
+		<Group>Framework</Group>
+		<SubGroup>Core::Web</SubGroup>
+		<Setting>
+			<Array>
+				<Item>thirdparty/ImprovedFields/ImprovedFields.css</Item>
+				<Item>thirdparty/ImprovedFields/ImprovedFields.TabularField.css</Item>
+			</Array>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="DynamicFields::Backend###RegexText"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Registration for the regex text type.
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
+		<Setting>
+			<Hash>
+				<Item Key="ConfigDialog">AdminDynamicFieldCustomText</Item>
+				<Item Key="DisplayName">RegexText</Item>
+				<Item Key="Module">Kernel::System::DynamicField::Backend::RegexText</Item>
+			</Hash>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="DynamicFields::Backend###AutocompleteText"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Registration for the autocomplete type
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
+		<Setting>
+			<Hash>
+				<Item Key="ConfigDialog">AdminDynamicFieldCustomText</Item>
+				<Item Key="DisplayName">AutocompleteText</Item>
+				<Item Key="Module">Kernel::System::DynamicField::Backend::AutocompleteText</Item>
+			</Hash>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="DynamicFields::Backend###ImprovedDate"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Registration for the date type.
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
+		<Setting>
+			<Hash>
+				<Item Key="ConfigDialog">AdminDynamicFieldImprovedDateTime</Item>
+				<Item Key="DisplayName">ImprovedDate</Item>
+				<Item Key="Module">Kernel::System::DynamicField::Backend::ImprovedDate</Item>
+			</Hash>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="DynamicFields::Backend###TabularDataField"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Registration for the multiline column text type.
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>DynamicFields::Backend::Registration</SubGroup>
+		<Setting>
+			<Hash>
+				<Item Key="ConfigDialog">AdminDynamicFieldTabularDataField</Item>
+				<Item Key="DisplayName">TabularData</Item>
+				<Item Key="Module">Kernel::System::DynamicField::Backend::TabularDataField</Item>
+			</Hash>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="Frontend::Module###AdminDynamicFieldCustomText"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Frontend module registration for the admin interface
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
+		<Setting>
+			<FrontendModuleReg>
+				<Group>admin</Group>
+				<Title Translatable="1">Dynamic Fields RegexText Backend GUI
+				</Title>
+				<Description>Admin</Description>
+				<Loader>
+					<JavaScript>Core.Agent.Admin.DynamicField.js</JavaScript>
+				</Loader>
+			</FrontendModuleReg>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="CustomerFrontend::Module###DynamicFieldAutocompleteText"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Frontend module registration for the customer interface
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>Frontend::Customer::ModuleRegistration</SubGroup>
+		<Setting>
+			<FrontendModuleReg>
+				<Description>Customize this class with your own actions
+				</Description>
+			</FrontendModuleReg>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="Frontend::Module###AdminDynamicFieldImprovedDateTime"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Frontend module registration for the admin interface
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
+		<Setting>
+			<FrontendModuleReg>
+				<Group>admin</Group>
+				<Title Translatable="1">Dynamic Fields ImprovedDateTime Backend GUI
+				</Title>
+				<Description>Admin</Description>
+				<Loader>
+					<JavaScript>Core.Agent.Admin.DynamicField.js</JavaScript>
+					<CSS>Core.Agent.Admin.DynamicField.css</CSS>
+					<JavaScript>Core.Agent.Admin.DynamicFieldDateTime.js</JavaScript>
+				</Loader>
+			</FrontendModuleReg>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="Frontend::Module###DynamicFieldAutocompleteText"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Frontend module registration for the agent interface
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
+		<Setting>
+			<FrontendModuleReg>
+				<Description>Customize this class with your own actions
+				</Description>
+			</FrontendModuleReg>
+		</Setting>
+	</ConfigItem>
+	<ConfigItem
+		Name="Frontend::Module###AdminDynamicFieldTabularDataField"
+		Required="0"
+		Valid="1">
+		<Description Translatable="1">Frontend module registration for the admin interface
+		</Description>
+		<Group>ImprovedFields</Group>
+		<SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
+		<Setting>
+			<FrontendModuleReg>
+				<Group>admin</Group>
+				<Title Translatable="1">Dynamic Fields TabularDataField Backend GUI
+				</Title>
+				<Description>Admin</Description>
+				<Loader>
+					<CSS>Core.Agent.Admin.DynamicField.css</CSS>
+					<JavaScript>Core.Agent.Admin.DynamicField.js</JavaScript>
+					<JavaScript>Core.Agent.Admin.DynamicFieldMultiselect.js
+					</JavaScript>
+				</Loader>
+			</FrontendModuleReg>
+		</Setting>
+	</ConfigItem>
 </otrs_config>

@@ -11,7 +11,8 @@ ImprovedFields.TabularField = (function (TargetNS) {
 		_loopChildren(parentId + "_RowData", function(rowIndex, rowObj) {
 			if ($(rowObj).attr("id").indexOf("TemplateRow") < 0) {
 				_loopChildren($(rowObj).attr("id"), function(colIndex, colObj) {
-					if ($(colObj).attr("id").indexOf("RemoveValue") < 0) {
+					var id = $(colObj).attr("id") || "";
+					if (id.indexOf("RemoveValue") < 0) {
 						var o = $(colObj).attr("id").lastIndexOf("_") + 1;
 						var b = $(colObj).attr("name").lastIndexOf("_") + 1;
 						$(colObj).attr("id", $(colObj).attr("id").substring(0,o) + rowIndex);
@@ -22,15 +23,16 @@ ImprovedFields.TabularField = (function (TargetNS) {
 			}
 		});
 	};
-	
+
 	TargetNS.Update = function(parentId) {
 		var currentValue = $("#" + parentId).val(function(index, value) {
 			var value = {};
-			
+
 			_loopChildren(parentId + "_RowData", function(rowIndex, rowObj) {
-				if ($(rowObj).attr("id").indexOf("TemplateRow") < 0) {
+				var id = $(rowObj).attr("id") || "";
+				if (id.indexOf("TemplateRow") < 0) {
 					var rowDataCheck = '';
-					
+
 					// Here we loop the children and build the json to be passed to the backend
 					_loopChildren($(rowObj).attr("id"), function(colIndex, colObj) {
 						var colId = $(colObj).attr("id");
@@ -43,7 +45,7 @@ ImprovedFields.TabularField = (function (TargetNS) {
 								.substring(0, colName.lastIndexOf("_"));
 							value["ROW_" + rowIndex][colName] = value["ROW_" + rowIndex][colName] || {};
 							value["ROW_" + rowIndex][colName] = $(colObj).children("input:first").val();
-							
+
 							rowDataCheck += $(colObj).children("input:first").val();
 						}
 					})
