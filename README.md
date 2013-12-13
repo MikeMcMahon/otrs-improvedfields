@@ -1,5 +1,5 @@
-otrs-improvedfields
-===================
+Improved Fields
+===============
 
 Adds new fields to OTRS: 
 
@@ -9,23 +9,23 @@ Adds a field that can be validated using regular expression.
 
 Examples:
 
-*Phone Validation*
+#### Phone Validation
 
     ^\([0-9]{3}\) [1-9][0-9]{2}-[0-9]{4}$
 
-__Matches any phone number in the format of (555) 555-5555 (american style numbers)__
+_Matches any phone number in the format of (555) 555-5555 (american style numbers)_
 
-*Numbers Only*
+#### Numbers Only
 
     ^[0-9]*$
     
-__forces input to contain only numbers__
+_forces input to contain only numbers_
 
-*Alpha Only*
+#### Alpha Only
 
     ^[a-zA-Z]*$
 
-__forces input to contain only characters__
+_forces input to contain only characters_
 
 Validated using http://www.regexpal.com/
 
@@ -50,5 +50,5 @@ The column ordering is validated with the following regex: `^[0-9]{n}(:[and]?[r]
 * d = datetime fields
 * r = required column
 
-__~~strikethrough~~ == not yet implemented__
+_~~strikethrough~~ == not yet implemented_
 
